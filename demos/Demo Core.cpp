@@ -1,7 +1,26 @@
 #include "drtface.h"
 
-int main() {
+using namespace drtf;
+
+CascadeClassifier face_cascade(dataPath + "haarcascade_frontalface_default.xml");
+
+std::vector<ptr_face_t> faceDetector(const Mat& img) {
+	Mat img_gray;
+	cvtColor(img, img_gray, COLOR_BGR2GRAY);
+	equalizeHist(img_gray, img_gray);
+	std::vector<ptr_face_t> res;
 	
+	std::vector<Rect> vObjects;
+	face_cascade.detectMultiScale(img_gray, vObjects);
+	
+	for (auto object: vObjects)
+		res.push_back(std::make_shared<CFace>(object));
+	
+	return res;
+}
+
+
+int main() {
 
 	std::vector<Point2f> vPoints;
 	std::vector<ptr_face_t> vpFaceses;
@@ -22,36 +41,26 @@ int main() {
 	controller.start();
 	
 	// Main loop
-	Mat img, mask;
-	float attenuation = 0.5f;
+	Mat img;
 	for(;;) {
 		img = controller.getFrame();
 
 		if (!img.empty()) {
-			if (mask.empty()) mask = Mat(img.size(), img.type());
-			mask.setTo(0);
 
-			// ------ PUT YOUR CODE HERE -------
-			// vpFaceses = detect faces();
-			CMarker::markFaces(mask, vpFaceses);
+			vpFaceses = faceDetector(img);
+			CMarker::markFaces(img, vpFaceses);
 			
-			// ------ PUT YOUR CODE HERE -------
 			// vPoints = good features to track ()
-			CMarker::markPoints(mask, vPoints);
+			// CMarker::markPoints(img, vPoints);
 			// { hFlow, vFlow } = calculate optical flow (vPoints)
 			// CMarker::markVecOFF(mask, hFlow, vFlow);
 			
-			CMarker::markGUI(mask);
-			
-
-			add(img, attenuation * mask, img);
+			//CMarker::markGUI(mask);
 
 			imshow("Camera", img);
 		}
 		int key = waitKey(5);
 		if (key == 27 || key == 'q') break;
-		if (key == 'a') attenuation *= 1.1f;
-		if (key == 'z') attenuation *= 0.9f;
 	}
 
 	controller.stop();
