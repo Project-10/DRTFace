@@ -8,10 +8,10 @@
 
 To build and run demo:
 
-`mkdir build && cd build
+`mkdir build && cd build`
 
-cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local
+`cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local`
 
-make
+`make`
 
-./bin/Demo\ Core`
+`./bin/Demo\ Core`
