@@ -7,7 +7,10 @@
 [Detect | Recognize | Track] Face
 
 To build and run demo:
-`mkdir build && cd build`
-`cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local`
-`make`
-`./bin/Demo\ Core`
+`mkdir build && cd build
+
+cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local
+
+make
+
+./bin/Demo\ Core`
