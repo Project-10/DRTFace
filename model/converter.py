@@ -10,7 +10,7 @@ print('tf version:',tf.__version__)
 network = keras.models.load_model("model")
 
 # Convert Keras model to ConcreteFunction
-full_model = tf.function(lambda x: network(x))
+full_model = tf.function(network)
 full_model = full_model.get_concrete_function(
 tf.TensorSpec(network.inputs[0].shape, network.inputs[0].dtype))
 
