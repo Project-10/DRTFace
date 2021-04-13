@@ -1,8 +1,17 @@
+#include <iostream>
 #include "drtface.h"
+#include <sys/wait.h>
+#include <opencv2/dnn.hpp>
 
+using namespace std;
 using namespace drtf;
+using namespace dnn;
+using namespace cv::dnn;
 
+static string class_name[] = {"Angry","Disgust","Fear","Happy","Neutral","Sad","Surprise"};
 CascadeClassifier face_cascade(dataPath + "haarcascade_frontalface_default.xml");
+string path = "../../model/frozen_models/frozen_graph.pb";
+Net net = readNetFromTensorflow(path);
 
 std::vector<ptr_face_t> faceDetector(const Mat& img) {
 	Mat img_gray;
@@ -19,6 +28,27 @@ std::vector<ptr_face_t> faceDetector(const Mat& img) {
 	return res;
 }
 
+std::string get_label(Net net, Mat frame){
+	Mat frame_32F;
+     frame.convertTo(frame_32F,CV_32FC1);
+     Mat blob = blobFromImage(1-frame_32F/255.0,
+                              1.0,
+                              Size(48,48),
+                              Scalar(0,0,0));
+     net.setInput(blob);
+     Mat out = net.forward();
+     Point maxclass;
+     minMaxLoc(out, NULL, NULL, NULL, &maxclass);
+     return class_name[maxclass.x];
+}
+
+void assign_labels(Mat& img, const std::vector<ptr_face_t>& vFaces){
+	for (const auto& face : vFaces){
+		Mat grey;
+		cv::cvtColor(img(face->getArea()), grey, COLOR_BGR2GRAY);
+		face->setText(get_label(net, grey));
+	}
+}
 
 int main() {
 
@@ -26,7 +56,7 @@ int main() {
 	std::vector<ptr_face_t> vpFaceses;
 	
 	namedWindow("Camera");
-	
+
 	// mouse callback function which fills vPoints with coordinates of mouse clicks
 	setMouseCallback("Camera", [] (int event, int x, int y, int flags, void* userdata) {
 		if (userdata && event == EVENT_LBUTTONDOWN) {
@@ -48,6 +78,7 @@ int main() {
 		if (!img.empty()) {
 
 			vpFaceses = faceDetector(img);
+			assign_labels(img, vpFaceses);
 			CMarker::markFaces(img, vpFaceses);
 			
 			// vPoints = good features to track ()
@@ -66,4 +97,4 @@ int main() {
 	controller.stop();
 	return 0;
 }
-	
+

@@ -6,12 +6,14 @@
 
 [Detect | Recognize | Track] Face
 
-To build and run demo:
+# Run Application
 
-`mkdir build && cd build`
+` mkdir build && cd build`
 
-`cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local`
+` cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local `
 
-`make`
+` make `
 
-`./bin/Demo\ Core`
+` cd bin `
+
+` ./Demo\ Core `

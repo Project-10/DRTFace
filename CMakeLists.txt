@@ -11,11 +11,9 @@ set (DRTFACE_VERSION ${DRTFACE_VERSION_MAJOR}.${DRTFACE_VERSION_MINOR}.${DRTFACE
 configure_file(${PROJECT_SOURCE_DIR}/cmake/types.h.in ${PROJECT_SOURCE_DIR}/include/types.h)
 
 # OpenCV
-find_package(OpenCV 4 REQUIRED core features2d xfeatures2d objdetect highgui imgproc imgcodecs ml PATHS "$ENV{OPENCVDIR}/build")
+find_package(OpenCV 4.5 REQUIRED core features2d objdetect highgui imgproc imgcodecs ml dnn PATHS "$ENV{OPENCVDIR}/build")
 # find_package(OpenCV 3 REQUIRED PATHS "$ENV{OPENCVDIR}/build")
-find_package(Boost)
-find_package(DLIB REQUIRED)
-# find_library(TENSORFLOW_LIB tensorflow REQUIRED HINT $ENV{HOME}/libtensorflow2/lib)
+
 # Turn on the ability to create folders to organize projects (.vcproj)
 # It creates "CMakePredefinedTargets" folder by default and adds CMake defined projects like INSTALL.vcproj and ZERO_CHECK.vcproj
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -73,8 +71,7 @@ include(CMakeDependentOption)
 add_subdirectory(modules/core)
 #add_subdirectory(tests)
 add_subdirectory(demos)
-add_subdirectory(ml)
-add_subdirectory(p_test)
+
 # ===============================
 
 # Add all targets to the build-tree export set
