@@ -1,6 +1,6 @@
 #include <iostream>
 #include "drtface.h"
-#include <sys/wait.h>
+// #include <sys/wait.h>
 #include <opencv2/dnn.hpp>
 
 using namespace std;
