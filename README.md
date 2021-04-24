@@ -6,6 +6,12 @@
 
 [Detect | Recognize | Track] Face
 
+# Run Model
+
+` cd model `
+
+` ./build.sh `
+
 # Run Application
 
 ` mkdir build && cd build`
