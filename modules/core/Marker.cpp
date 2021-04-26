@@ -6,7 +6,9 @@ namespace drtf {
 		for (const auto& face : vFaces) {
 			// TODO: Print the text using face->getText();
 			// TODO: Print face id using face->getId();
+			Point top( face->getArea().x , face->getArea().y);
 			rectangle(img, face->getArea(), CV_RGB(0, 255, 0));
+			putText(img, face->getText(), top, FONT_HERSHEY_PLAIN, 3, CV_RGB(55, 100, 115), 4);
 		}
 	}
 
